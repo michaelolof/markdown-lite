@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Markdown Lite</title>
+	<script type="module" src="./main.mjs"></script>
+</head>
+<body>
+	<div class="overlay" id="overlay"></div>
+
+	<div class="layout" id="layout">
+		<aside class="sidebar" id="sidebar">
+			<div class="sidebar__brand">
+				<div class="sidebar__brand-copy">
+					<div class="sidebar__brand-label" id="brand-label">markdown-lite</div>
+					<div class="sidebar__brand-name" id="brand-name">Docs</div>
+				</div>
+				<div class="sidebar__controls" aria-label="Sidebar controls">
+					<button class="sidebar__control" id="sidebar-narrow-btn" type="button" aria-label="Decrease sidebar width" title="Decrease sidebar width">−</button>
+					<button class="sidebar__control" id="sidebar-toggle-btn" type="button" aria-label="Collapse sidebar" title="Collapse sidebar">⇤</button>
+					<button class="sidebar__control" id="sidebar-wide-btn" type="button" aria-label="Increase sidebar width" title="Increase sidebar width">+</button>
+				</div>
+			</div>
+			<div class="sidebar__tabs" role="tablist" aria-label="Sidebar views">
+				<button class="sidebar__tab is-active" type="button" role="tab" aria-selected="true" aria-controls="tree-panel" data-panel="tree">Folders</button>
+				<button class="sidebar__tab" type="button" role="tab" aria-selected="false" aria-controls="legend-panel" data-panel="legend">Legend</button>
+			</div>
+			<div class="sidebar__search">
+				<input type="search" id="search" placeholder="Filter files…" autocomplete="off" spellcheck="false">
+			</div>
+			<div class="sidebar__panels">
+				<nav class="sidebar__tree sidebar__panel is-active" id="tree-panel" aria-label="Documents">
+					<div id="tree"></div>
+				</nav>
+				<nav class="sidebar__legend sidebar__panel" id="legend-panel" aria-label="Current document headings">
+					<div class="legend-state" id="legend-empty">Open a document to view its heading legend.</div>
+					<div id="legend"></div>
+				</nav>
+			</div>
+			<div class="sidebar__resizer" id="sidebar-resizer" aria-hidden="true"></div>
+		</aside>
+
+		<header class="topbar">
+			<button class="topbar__menu" id="menu-btn" aria-label="Open navigation">☰</button>
+			<div class="topbar__breadcrumb" id="breadcrumb">Select a document</div>
+			<div class="topbar__tools">
+				<div class="topbar__group" aria-label="Scroll document">
+					<button class="topbar__btn" id="scroll-top-btn" type="button" aria-label="Scroll to top" title="Scroll to top">Top</button>
+					<button class="topbar__btn" id="scroll-bottom-btn" type="button" aria-label="Scroll to bottom" title="Scroll to bottom">Bottom</button>
+				</div>
+				<div class="topbar__search" aria-label="Search current document">
+					<input type="search" id="content-search" placeholder="Search this document…" autocomplete="off" spellcheck="false" aria-label="Search this document">
+					<div class="topbar__count" id="content-search-count" aria-live="polite">0</div>
+					<button class="topbar__btn" id="content-prev-btn" type="button" aria-label="Previous match" title="Previous match">↑</button>
+					<button class="topbar__btn" id="content-next-btn" type="button" aria-label="Next match" title="Next match">↓</button>
+				</div>
+			</div>
+			<a class="topbar__source" id="source-link" href="#" style="display:none" target="_blank" rel="noreferrer">↗ Source</a>
+		</header>
+
+		<main class="main" id="main">
+			<div id="welcome">
+				<div class="welcome">
+					<h1 class="welcome__heading" id="welcome-heading">Markdown Lite</h1>
+					<p class="welcome__sub" id="welcome-sub">Select a document from the sidebar, or jump to one below.</p>
+					<div class="welcome__grid" id="welcome-grid"></div>
+				</div>
+			</div>
+		</main>
+	</div>
+</body>
+</html>

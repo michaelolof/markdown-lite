@@ -1,0 +1,36 @@
+{
+	"name": "markdown-lite",
+	"version": "0.1.0",
+	"description": "Portable markdown viewer with clean pathname routing.",
+	"type": "module",
+	"exports": {
+		".": "./src/index.mjs",
+		"./server": "./src/server.mjs",
+		"./routes": "./src/lib/routes.mjs"
+	},
+	"bin": {
+		"markdown-lite": "./src/cli.mjs"
+	},
+	"files": [
+		"dist",
+		"src"
+	],
+	"engines": {
+		"node": ">=20"
+	},
+	"scripts": {
+		"build": "vite build",
+		"start": "node src/cli.mjs",
+		"test": "node --test",
+		"prepack": "pnpm build"
+	},
+	"dependencies": {
+		"chokidar": "^5.0.0",
+		"highlight.js": "^11.11.1",
+		"marked": "^18.0.3",
+		"mermaid": "^11.14.0"
+	},
+	"devDependencies": {
+		"vite": "^8.0.10"
+	}
+}
