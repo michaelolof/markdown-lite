@@ -1,17 +1,21 @@
 {
-	"name": "markdown-lite",
+	"name": "@michaelolof/markdown-serve",
 	"version": "0.1.0",
-	"description": "Portable markdown viewer with clean pathname routing.",
+	"description": "Portable markdown server with clean pathname routing.",
 	"type": "module",
+	"publishConfig": {
+		"access": "public"
+	},
 	"exports": {
 		".": "./src/index.mjs",
 		"./server": "./src/server.mjs",
 		"./routes": "./src/lib/routes.mjs"
 	},
 	"bin": {
-		"markdown-lite": "./src/cli.mjs"
+		"markdown-serve": "./bin/markdown-serve.js"
 	},
 	"files": [
+		"bin",
 		"dist",
 		"src"
 	],

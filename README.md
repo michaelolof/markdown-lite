@@ -1,6 +1,6 @@
-# markdown-lite
+# @michaelolof/markdown-serve
 
-markdown-lite is a portable markdown viewer for serving a directory of `.md` files as a standalone local website with clean pathname routing.
+@michaelolof/markdown-serve is a portable markdown viewer for serving a directory of `.md` files as a standalone local website with clean pathname routing.
 
 It keeps the current markdown viewer behavior intact while removing the old `make`, `manifest.json`, and Python HTTP server requirements.
 
@@ -20,19 +20,19 @@ It keeps the current markdown viewer behavior intact while removing the old `mak
 If the package is published, install it globally with your package manager of choice:
 
 ```sh
-pnpm add -g markdown-lite
+pnpm add -g @michaelolof/markdown-serve
 ```
 
 or
 
 ```sh
-npm install -g markdown-lite
+npm install -g @michaelolof/markdown-serve
 ```
 
 Then run it against any directory that contains markdown files:
 
 ```sh
-markdown-lite ./docs
+markdown-serve ./docs
 ```
 
 ### From this repository
@@ -50,7 +50,7 @@ pnpm start -- ./docs
 ## CLI usage
 
 ```sh
-markdown-lite [directory] [options]
+markdown-serve [directory] [options]
 ```
 
 Options:
@@ -64,15 +64,15 @@ Options:
 Examples:
 
 ```sh
-markdown-lite ./docs --port 7000
+markdown-serve ./docs --port 7000
 ```
 
 ```sh
-markdown-lite ./docs --host 0.0.0.0 --port 8080 --title "Project Docs"
+markdown-serve ./docs --host 0.0.0.0 --port 8080 --title "Project Docs"
 ```
 
 ```sh
-MARKDOWN_LITE_PORT=9000 markdown-lite ./docs
+MARKDOWN_SERVE_PORT=9000 markdown-serve ./docs
 ```
 
 ## Port configuration
@@ -82,32 +82,32 @@ The port number is configurable in three ways.
 Precedence order:
 
 1. `--port`
-2. `MARKDOWN_LITE_PORT`
+2. `MARKDOWN_SERVE_PORT`
 3. `PORT`
 4. default `6450`
 
 Examples:
 
 ```sh
-markdown-lite ./docs --port 7000
+markdown-serve ./docs --port 7000
 ```
 
 ```sh
-PORT=7000 markdown-lite ./docs
+PORT=7000 markdown-serve ./docs
 ```
 
 ```sh
-MARKDOWN_LITE_PORT=7100 markdown-lite ./docs
+MARKDOWN_SERVE_PORT=7100 markdown-serve ./docs
 ```
 
 ## Programmatic usage
 
-markdown-lite also exposes a small Node API.
+markdown-serve also exposes a small Node API.
 
 ```js
-import { startMarkdownLiteServer } from 'markdown-lite';
+import { startMarkdownServeServer } from '@michaelolof/markdown-serve';
 
-const { url, server } = await startMarkdownLiteServer({
+const { url, server } = await startMarkdownServeServer({
 	rootDir: '/absolute/path/to/docs',
 	port: 7000,
 	host: '127.0.0.1',
@@ -123,7 +123,7 @@ process.on('SIGINT', () => {
 
 You can also use the lower-level exports for route generation and document indexing:
 
-- `createMarkdownLiteServer`
+- `createMarkdownServeServer`
 - `buildDocsIndex`
 - `routePathFromFilePath`
 - `createRouteIndex`
@@ -142,7 +142,7 @@ This preserves the real filename and avoids collisions caused by lossy slug gene
 
 ## Live refresh behavior
 
-markdown-lite automatically watches the markdown file that is currently open in the browser.
+markdown-serve automatically watches the markdown file that is currently open in the browser.
 
 When that file changes on disk, the viewer fetches the latest content and rerenders the open document without a full page reload.
 

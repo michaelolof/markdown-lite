@@ -1,12 +1,12 @@
 export {
-	createMarkdownLiteServer,
+	createMarkdownServeServer,
 	DEFAULT_VIEWER_DIR,
 	INTERNAL_BASE_PATH,
 	ROUTES_ENDPOINT,
 	CONTENT_PREFIX,
 	WATCH_ENDPOINT,
 	ensureViewerBuild,
-	startMarkdownLiteServer,
+	startMarkdownServeServer,
 } from './server.mjs';
 
 export {

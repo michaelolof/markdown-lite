@@ -5,7 +5,7 @@ import hljs from 'highlight.js';
 import { marked } from 'marked';
 import mermaid from 'mermaid';
 
-const API_BASE = '/__markdown_lite';
+const API_BASE = '/__markdown_serve';
 const ROUTES_ENDPOINT = `${API_BASE}/routes`;
 
 const treeEl = document.getElementById('tree');
@@ -42,7 +42,7 @@ let currentSearchIndex = -1;
 let isDesktopSidebarCollapsed = false;
 let sidebarWidth = 272;
 let activeSidebarPanel = 'tree';
-let docsTitle = 'Markdown Lite';
+let docsTitle = 'Markdown Serve';
 let docsEntries = [];
 let docsEntriesByFilePath = new Map();
 let docsEntriesByRoutePath = new Map();
@@ -50,12 +50,12 @@ let currentDocWatchSource = null;
 let currentWatchedFilePath = '';
 let currentLoadRequestId = 0;
 
-const SIDEBAR_STORAGE_KEY = 'markdown-lite-sidebar-width';
-const SIDEBAR_COLLAPSED_STORAGE_KEY = 'markdown-lite-sidebar-collapsed';
-const SIDEBAR_TREE_FILTER_STORAGE_KEY = 'markdown-lite-sidebar-tree-filter';
-const SIDEBAR_LEGEND_FILTER_STORAGE_KEY = 'markdown-lite-sidebar-legend-filter';
-const SIDEBAR_PANEL_STORAGE_KEY = 'markdown-lite-sidebar-panel';
-const CONTENT_SEARCH_STORAGE_KEY = 'markdown-lite-content-search';
+const SIDEBAR_STORAGE_KEY = 'markdown-serve-sidebar-width';
+const SIDEBAR_COLLAPSED_STORAGE_KEY = 'markdown-serve-sidebar-collapsed';
+const SIDEBAR_TREE_FILTER_STORAGE_KEY = 'markdown-serve-sidebar-tree-filter';
+const SIDEBAR_LEGEND_FILTER_STORAGE_KEY = 'markdown-serve-sidebar-legend-filter';
+const SIDEBAR_PANEL_STORAGE_KEY = 'markdown-serve-sidebar-panel';
+const CONTENT_SEARCH_STORAGE_KEY = 'markdown-serve-content-search';
 const CONTENT_SEARCH_QUERY_PARAM = 'q';
 const SIDEBAR_MIN_WIDTH = 220;
 const SIDEBAR_MAX_WIDTH = 420;
@@ -159,7 +159,7 @@ function updatePageTitle() {
 }
 
 function applyViewerTitle(title) {
-	docsTitle = title || 'Markdown Lite';
+	docsTitle = title || 'Markdown Serve';
 	brandNameEl.textContent = docsTitle;
 	welcomeHeadingEl.textContent = docsTitle;
 	updatePageTitle();

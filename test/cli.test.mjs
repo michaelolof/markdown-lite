@@ -11,16 +11,16 @@ test('uses the default port when no override is provided', () => {
 	assert.equal(resolveConfiguredPort({}), 6450);
 });
 
-test('prefers MARKDOWN_LITE_PORT over PORT', () => {
-	assert.equal(resolveConfiguredPort({ MARKDOWN_LITE_PORT: '7100', PORT: '7200' }), 7100);
+test('prefers MARKDOWN_SERVE_PORT over PORT', () => {
+	assert.equal(resolveConfiguredPort({ MARKDOWN_SERVE_PORT: '7100', PORT: '7200' }), 7100);
 });
 
-test('uses PORT when MARKDOWN_LITE_PORT is not set', () => {
+test('uses PORT when MARKDOWN_SERVE_PORT is not set', () => {
 	assert.equal(resolveConfiguredPort({ PORT: '7300' }), 7300);
 });
 
 test('prefers the CLI port flag over environment values', () => {
-	const options = parseArgs(['docs', '--port', '7400'], { MARKDOWN_LITE_PORT: '7100', PORT: '7200' });
+	const options = parseArgs(['docs', '--port', '7400'], { MARKDOWN_SERVE_PORT: '7100', PORT: '7200' });
 	assert.equal(options.rootDir, 'docs');
 	assert.equal(options.port, 7400);
 });
@@ -30,9 +30,9 @@ test('rejects invalid environment port values', () => {
 });
 
 test('treats a symlinked cli path as direct execution', async () => {
-	const fixtureDir = await mkdtemp(path.join(tmpdir(), 'markdown-lite-cli-'));
+	const fixtureDir = await mkdtemp(path.join(tmpdir(), 'markdown-serve-cli-'));
 	const cliPath = path.resolve('src/cli.mjs');
-	const symlinkPath = path.join(fixtureDir, 'markdown-lite');
+	const symlinkPath = path.join(fixtureDir, 'markdown-serve');
 	await symlink(cliPath, symlinkPath);
 
 	assert.equal(

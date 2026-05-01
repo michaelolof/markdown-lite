@@ -4,13 +4,13 @@ import { tmpdir } from 'node:os';
 import path from 'node:path';
 import test from 'node:test';
 
-import { createMarkdownLiteServer, INTERNAL_BASE_PATH } from '../src/server.mjs';
+import { createMarkdownServeServer, INTERNAL_BASE_PATH } from '../src/server.mjs';
 
 const docsRoot = path.resolve('test/fixtures/basic-docs');
 const viewerDir = path.resolve('test/fixtures/viewer');
 
 async function startFixtureServer({ rootDir = docsRoot } = {}) {
-	const server = createMarkdownLiteServer({
+	const server = createMarkdownServeServer({
 		rootDir,
 		title: 'Fixture Docs',
 		viewerDir,
@@ -36,7 +36,7 @@ async function stopFixtureServer(server) {
 }
 
 async function createTempDocsFixture(files) {
-	const rootDir = await mkdtemp(path.join(tmpdir(), 'markdown-lite-watch-'));
+	const rootDir = await mkdtemp(path.join(tmpdir(), 'markdown-serve-watch-'));
 	for (const [filePath, content] of Object.entries(files)) {
 		const absoluteFilePath = path.join(rootDir, filePath);
 		await mkdir(path.dirname(absoluteFilePath), { recursive: true });
@@ -118,8 +118,8 @@ test('serves the clean route manifest with encoded pathname routes', async conte
 
 	const weirdEntry = payload.entries.find(entry => entry.filePath === 'weird/naïve #topic%.md');
 	assert.equal(weirdEntry.routePath, '/weird/na%C3%AFve%20%23topic%25');
-	assert.equal(weirdEntry.contentUrl, '/__markdown_lite/content/weird%2Fna%C3%AFve%20%23topic%25.md');
-	assert.equal(weirdEntry.watchUrl, '/__markdown_lite/watch?file=weird%2Fna%C3%AFve%20%23topic%25.md');
+	assert.equal(weirdEntry.contentUrl, '/__markdown_serve/content/weird%2Fna%C3%AFve%20%23topic%25.md');
+	assert.equal(weirdEntry.watchUrl, '/__markdown_serve/watch?file=weird%2Fna%C3%AFve%20%23topic%25.md');
 });
 
 test('serves markdown content through the internal content endpoint', async context => {

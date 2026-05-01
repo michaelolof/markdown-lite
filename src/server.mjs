@@ -7,7 +7,7 @@ import { buildDocsIndex, readMarkdownDocument } from './lib/docs.mjs';
 import { normalizeMarkdownFilePath } from './lib/routes.mjs';
 import { createOpenFileWatchRegistry } from './lib/watch.mjs';
 
-export const INTERNAL_BASE_PATH = '/__markdown_lite';
+export const INTERNAL_BASE_PATH = '/__markdown_serve';
 export const ROUTES_ENDPOINT = `${INTERNAL_BASE_PATH}/routes`;
 export const CONTENT_PREFIX = `${INTERNAL_BASE_PATH}/content/`;
 export const WATCH_ENDPOINT = `${INTERNAL_BASE_PATH}/watch`;
@@ -276,7 +276,7 @@ async function handleRequest(request, response, options) {
 	await serveViewerShell(response, options.viewerDir, method);
 }
 
-export function createMarkdownLiteServer({ rootDir, title, viewerDir = DEFAULT_VIEWER_DIR }) {
+export function createMarkdownServeServer({ rootDir, title, viewerDir = DEFAULT_VIEWER_DIR }) {
 	const watchRegistry = createOpenFileWatchRegistry({ rootDir });
 	const server = http.createServer((request, response) => {
 		void handleRequest(request, response, { rootDir, title, viewerDir, watchRegistry }).catch(error => {
@@ -291,7 +291,7 @@ export function createMarkdownLiteServer({ rootDir, title, viewerDir = DEFAULT_V
 	return server;
 }
 
-export async function startMarkdownLiteServer({
+export async function startMarkdownServeServer({
 	rootDir,
 	title,
 	viewerDir = DEFAULT_VIEWER_DIR,
@@ -300,7 +300,7 @@ export async function startMarkdownLiteServer({
 }) {
 	await ensureViewerBuild(viewerDir);
 
-	const server = createMarkdownLiteServer({ rootDir, title, viewerDir });
+	const server = createMarkdownServeServer({ rootDir, title, viewerDir });
 	await new Promise((resolve, reject) => {
 		server.once('error', reject);
 		server.listen(port, host, () => {

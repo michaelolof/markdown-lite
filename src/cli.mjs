@@ -6,18 +6,18 @@ import { spawn } from 'node:child_process';
 import { realpathSync } from 'node:fs';
 import { pathToFileURL } from 'node:url';
 
-import { startMarkdownLiteServer } from './server.mjs';
+import { startMarkdownServeServer } from './server.mjs';
 
 const DEFAULT_PORT = 6450;
 const DEFAULT_HOST = '127.0.0.1';
 
 function printHelp() {
-	console.log(`markdown-lite [directory] [options]
+	console.log(`markdown-serve [directory] [options]
 
 Serve a directory of markdown files with clean pathname routing.
 
 Options:
-  --port <number>   Port to listen on (default: ${DEFAULT_PORT}; env: MARKDOWN_LITE_PORT or PORT)
+	--port <number>   Port to listen on (default: ${DEFAULT_PORT}; env: MARKDOWN_SERVE_PORT or PORT)
   --host <address>  Host interface to bind (default: ${DEFAULT_HOST})
   --title <text>    Override the viewer title
   --open            Open the viewer in the default browser
@@ -33,8 +33,8 @@ function parsePortNumber(value, source) {
 }
 
 export function resolveConfiguredPort(env = process.env) {
-	if (env.MARKDOWN_LITE_PORT !== undefined) {
-		return parsePortNumber(env.MARKDOWN_LITE_PORT, 'MARKDOWN_LITE_PORT');
+	if (env.MARKDOWN_SERVE_PORT !== undefined) {
+		return parsePortNumber(env.MARKDOWN_SERVE_PORT, 'MARKDOWN_SERVE_PORT');
 	}
 
 	if (env.PORT !== undefined) {
@@ -150,8 +150,8 @@ export async function main(argv = process.argv.slice(2), env = process.env) {
 	}
 
 	const rootDir = path.resolve(process.cwd(), options.rootDir);
-	const title = options.title || path.basename(rootDir) || 'Markdown Lite';
-	const { server, url } = await startMarkdownLiteServer({
+	const title = options.title || path.basename(rootDir) || 'Markdown Serve';
+	const { server, url } = await startMarkdownServeServer({
 		rootDir,
 		host: options.host,
 		port: options.port,
