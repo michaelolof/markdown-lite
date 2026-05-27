@@ -1,4 +1,5 @@
 import http from 'node:http';
+import { networkInterfaces } from 'node:os';
 import path from 'node:path';
 import { readFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
@@ -11,6 +12,8 @@ export const INTERNAL_BASE_PATH = '/__markdown_serve';
 export const ROUTES_ENDPOINT = `${INTERNAL_BASE_PATH}/routes`;
 export const CONTENT_PREFIX = `${INTERNAL_BASE_PATH}/content/`;
 export const WATCH_ENDPOINT = `${INTERNAL_BASE_PATH}/watch`;
+
+const WILDCARD_HOSTS = new Set(['0.0.0.0', '::']);
 
 const MODULE_DIR = path.dirname(fileURLToPath(import.meta.url));
 export const DEFAULT_VIEWER_DIR = path.resolve(MODULE_DIR, '../dist/viewer');
@@ -101,6 +104,37 @@ function createRoutesPayload(title, entries) {
 			sourceUrl: createContentUrl(entry.filePath),
 			watchUrl: createWatchUrl(entry.filePath),
 		})),
+	};
+}
+
+function formatUrlHost(host) {
+	return host.includes(':') ? `[${host}]` : host;
+}
+
+function isWildcardHost(host) {
+	return WILDCARD_HOSTS.has(host);
+}
+
+export function createServerUrls(host, port, interfaces = networkInterfaces()) {
+	const localHost = isWildcardHost(host) ? '127.0.0.1' : host;
+	const networkUrls = [];
+
+	if (isWildcardHost(host)) {
+		for (const addresses of Object.values(interfaces)) {
+			for (const addressInfo of addresses ?? []) {
+				const isIpv4 = addressInfo.family === 'IPv4' || addressInfo.family === 4;
+				if (addressInfo.internal || !isIpv4) {
+					continue;
+				}
+
+				networkUrls.push(`http://${formatUrlHost(addressInfo.address)}:${port}`);
+			}
+		}
+	}
+
+	return {
+		url: `http://${formatUrlHost(localHost)}:${port}`,
+		networkUrls: [...new Set(networkUrls)].sort(),
 	};
 }
 
@@ -295,7 +329,7 @@ export async function startMarkdownServeServer({
 	rootDir,
 	title,
 	viewerDir = DEFAULT_VIEWER_DIR,
-	host = '127.0.0.1',
+	host = '0.0.0.0',
 	port = 6450,
 }) {
 	await ensureViewerBuild(viewerDir);
@@ -311,12 +345,13 @@ export async function startMarkdownServeServer({
 
 	const address = server.address();
 	const actualPort = typeof address === 'object' && address ? address.port : port;
-	const publicHost = host === '0.0.0.0' ? '127.0.0.1' : host;
+	const { url, networkUrls } = createServerUrls(host, actualPort);
 
 	return {
 		server,
 		host,
 		port: actualPort,
-		url: `http://${publicHost}:${actualPort}`,
+		url,
+		networkUrls,
 	};
 }

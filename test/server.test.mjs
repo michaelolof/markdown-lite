@@ -4,7 +4,7 @@ import { tmpdir } from 'node:os';
 import path from 'node:path';
 import test from 'node:test';
 
-import { createMarkdownServeServer, INTERNAL_BASE_PATH } from '../src/server.mjs';
+import { createMarkdownServeServer, createServerUrls, INTERNAL_BASE_PATH } from '../src/server.mjs';
 
 const docsRoot = path.resolve('test/fixtures/basic-docs');
 const viewerDir = path.resolve('test/fixtures/viewer');
@@ -103,6 +103,20 @@ function createSseReader(stream) {
 		},
 	};
 }
+
+test('reports LAN URLs when listening on all interfaces', () => {
+	const { url, networkUrls } = createServerUrls('0.0.0.0', 6450, {
+		lo0: [{ address: '127.0.0.1', family: 'IPv4', internal: true }],
+		en0: [
+			{ address: '192.168.1.42', family: 'IPv4', internal: false },
+			{ address: 'fe80::1', family: 'IPv6', internal: false },
+		],
+		en1: [{ address: '10.0.0.15', family: 'IPv4', internal: false }],
+	});
+
+	assert.equal(url, 'http://127.0.0.1:6450');
+	assert.deepEqual(networkUrls, ['http://10.0.0.15:6450', 'http://192.168.1.42:6450']);
+});
 
 test('serves the clean route manifest with encoded pathname routes', async context => {
 	const { server, baseUrl } = await startFixtureServer();

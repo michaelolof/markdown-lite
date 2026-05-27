@@ -9,7 +9,7 @@ import { pathToFileURL } from 'node:url';
 import { startMarkdownServeServer } from './server.mjs';
 
 const DEFAULT_PORT = 6450;
-const DEFAULT_HOST = '127.0.0.1';
+const DEFAULT_HOST = '0.0.0.0';
 
 function printHelp() {
 	console.log(`markdown-serve [directory] [options]
@@ -18,7 +18,7 @@ Serve a directory of markdown files with clean pathname routing.
 
 Options:
 	--port <number>   Port to listen on (default: ${DEFAULT_PORT}; env: MARKDOWN_SERVE_PORT or PORT)
-  --host <address>  Host interface to bind (default: ${DEFAULT_HOST})
+	--host <address>  Host interface to bind (default: all interfaces, ${DEFAULT_HOST})
   --title <text>    Override the viewer title
   --open            Open the viewer in the default browser
   --help            Show this help message`);
@@ -151,7 +151,7 @@ export async function main(argv = process.argv.slice(2), env = process.env) {
 
 	const rootDir = path.resolve(process.cwd(), options.rootDir);
 	const title = options.title || path.basename(rootDir) || 'Markdown Serve';
-	const { server, url } = await startMarkdownServeServer({
+	const { server, url, networkUrls } = await startMarkdownServeServer({
 		rootDir,
 		host: options.host,
 		port: options.port,
@@ -159,7 +159,10 @@ export async function main(argv = process.argv.slice(2), env = process.env) {
 	});
 
 	console.log(`Serving ${rootDir}`);
-	console.log(url);
+	console.log(`Local:   ${url}`);
+	for (const networkUrl of networkUrls) {
+		console.log(`Network: ${networkUrl}`);
+	}
 
 	if (options.open) {
 		try {

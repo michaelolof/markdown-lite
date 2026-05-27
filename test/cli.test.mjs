@@ -11,6 +11,10 @@ test('uses the default port when no override is provided', () => {
 	assert.equal(resolveConfiguredPort({}), 6450);
 });
 
+test('binds to all interfaces by default', () => {
+	assert.equal(parseArgs([]).host, '0.0.0.0');
+});
+
 test('prefers MARKDOWN_SERVE_PORT over PORT', () => {
 	assert.equal(resolveConfiguredPort({ MARKDOWN_SERVE_PORT: '7100', PORT: '7200' }), 7100);
 });

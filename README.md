@@ -56,7 +56,7 @@ markdown-serve [directory] [options]
 Options:
 
 - `--port <number>`: bind the server to a specific port
-- `--host <address>`: bind to a specific host interface
+- `--host <address>`: bind to a specific host interface; defaults to `0.0.0.0` so other devices on the same local network can connect
 - `--title <text>`: override the viewer title shown in the UI
 - `--open`: open the viewer in the default browser after startup
 - `--help`: print usage help
@@ -68,12 +68,28 @@ markdown-serve ./docs --port 7000
 ```
 
 ```sh
-markdown-serve ./docs --host 0.0.0.0 --port 8080 --title "Project Docs"
+markdown-serve ./docs --port 8080 --title "Project Docs"
 ```
 
 ```sh
 MARKDOWN_SERVE_PORT=9000 markdown-serve ./docs
 ```
+
+## Local network access
+
+By default, markdown-serve binds to `0.0.0.0`, which makes it reachable from other devices on the same LAN.
+
+When the server starts, it prints a local URL for the current machine and one or more `Network:` URLs for your active LAN interfaces. Open one of those `Network:` URLs from another device on the same Wi-Fi or Ethernet network.
+
+Example:
+
+```text
+Serving /Users/you/docs
+Local:   http://127.0.0.1:6450
+Network: http://192.168.1.42:6450
+```
+
+If another device cannot connect, check the computer's firewall and make sure the chosen port is allowed for incoming connections.
 
 ## Port configuration
 
@@ -110,7 +126,7 @@ import { startMarkdownServeServer } from '@michaelolof/markdown-serve';
 const { url, server } = await startMarkdownServeServer({
 	rootDir: '/absolute/path/to/docs',
 	port: 7000,
-	host: '127.0.0.1',
+	host: '0.0.0.0',
 	title: 'Project Docs',
 });
 
