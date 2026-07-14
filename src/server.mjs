@@ -250,6 +250,7 @@ async function serveWatch(request, response, rootDir, method, url, watchRegistry
 		}
 		response.write(': heartbeat\n\n');
 	}, 15000);
+	heartbeat.unref();
 
 	let cleanedUp = false;
 	const cleanup = () => {

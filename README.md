@@ -116,6 +116,10 @@ PORT=7000 markdown-serve ./docs
 MARKDOWN_SERVE_PORT=7100 markdown-serve ./docs
 ```
 
+## Shutdown
+
+Press `Ctrl+C` or send `SIGTERM` (`kill <pid>`) to stop the server. It exits within ~1 second even when a browser tab is open with an active live-reload connection. If the process ever appears stuck, pressing `Ctrl+C` a second time forces an immediate exit.
+
 ## Programmatic usage
 
 markdown-serve also exposes a small Node API.
