@@ -172,12 +172,21 @@ export async function main(argv = process.argv.slice(2), env = process.env) {
 		}
 	}
 
+	let shuttingDown = false;
 	const shutdown = signal => {
-		server.close(() => {
-			if (signal) {
-				process.exit(0);
-			}
-		});
+		if (shuttingDown) {
+			// Second signal: user wants out NOW.
+			process.exit(signal === 'SIGINT' ? 130 : 1);
+			return;
+		}
+		shuttingDown = true;
+
+		server.close(() => process.exit(0));
+		// Destroy lingering keep-alive/SSE sockets so close() can complete (Node >= 18.2).
+		server.closeAllConnections();
+
+		// Safety net: never hang again.
+		setTimeout(() => process.exit(0), 1000).unref();
 	};
 
 	process.on('SIGINT', () => shutdown('SIGINT'));
